@@ -2,9 +2,10 @@ import React from "react";
 import { fetchProductsById } from "@/lib/product/productServices";
 import { ProductList } from "@/models/product.model";
 import { GetServerSidePropsContext } from "next";
+import ProductDetails from "@/components/products/ProductDetails";
 
 interface HomeProps {
-  product: ProductList[];
+  product: ProductList;
   pageId: string | string[] | undefined;
 }
 
@@ -27,13 +28,7 @@ export const getServerSideProps = async (
 };
 
 const ProductDetailPage: React.FC<HomeProps> = ({ product, pageId }) => {
-  return (
-    <div>
-      <h1>Product Detail Page</h1>
-      <p>Product ID: {pageId}</p>
-      {JSON.stringify(product)}
-    </div>
-  );
+  return <ProductDetails product={product} />;
 };
 
 export default ProductDetailPage;

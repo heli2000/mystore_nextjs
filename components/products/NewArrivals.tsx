@@ -2,6 +2,7 @@ import { ProductList } from "@/models/product.model";
 import { ProductCategoryList } from "@/models/product_category.model";
 import Image from "next/image";
 import React from "react";
+import { useRouter } from "next/router";
 
 interface HomeProps {
   newArrival: ProductList[];
@@ -12,6 +13,16 @@ const NewArrivals: React.FC<HomeProps> = ({
   newArrival,
   productCategories,
 }) => {
+  const router = useRouter();
+
+  const showProduct = (id: number) => {
+    router.push("/products/" + id);
+  };
+
+  const showProductByCategory = (id: number) => {
+    router.push("/products/category/" + id);
+  };
+
   return (
     <div className="grid grid-rows-1 grid-flow-col gap-4">
       <div className="row-span-3">
@@ -28,7 +39,11 @@ const NewArrivals: React.FC<HomeProps> = ({
           {newArrival?.length > 0 &&
             newArrival.map((obj: ProductList) => {
               return (
-                <div className="group relative text-sm" key={obj.product_id}>
+                <div
+                  className="group relative text-sm"
+                  key={obj.product_id}
+                  onClick={() => showProduct(obj.product_id)}
+                >
                   <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                     <Image
                       src={obj.image}
@@ -58,7 +73,11 @@ const NewArrivals: React.FC<HomeProps> = ({
           {productCategories?.length > 0 &&
             productCategories.map((obj: ProductCategoryList) => {
               return (
-                <div className="group relative text-sm" key={obj.id}>
+                <div
+                  className="group relative text-sm"
+                  key={obj.id}
+                  onClick={() => showProductByCategory(obj.id)}
+                >
                   <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
                     <Image
                       src={obj.image}
