@@ -1,9 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Header = () => {
   const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    try {
+      let CartDataObj = localStorage.getItem("CartData");
+      if (
+        CartDataObj !== undefined &&
+        CartDataObj !== null &&
+        CartDataObj !== ""
+      ) {
+        let CartCount: number = JSON.parse(CartDataObj).length;
+        setCartCount(CartCount);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }, []);
 
   return (
     <header>

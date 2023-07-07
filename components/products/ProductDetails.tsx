@@ -1,3 +1,4 @@
+import { CartList } from "@/models/cartWithoutLogin.model";
 import { ProductList } from "@/models/product.model";
 import Image from "next/image";
 import React from "react";
@@ -6,15 +7,16 @@ interface HomeProps {
   product: ProductList;
 }
 
-interface CartList {
-  product_id: number;
-  qty: number;
-}
-
 const ProductDetails: React.FC<HomeProps> = ({ product }) => {
   const addToCart = () => {
     if (product.product_id) {
-      let newData = { product_id: product.product_id, qty: 1 };
+      let newData = {
+        product_id: product.product_id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        qty: 1,
+      };
       let cartData = localStorage.getItem("CartData");
       if (cartData !== undefined && cartData !== null && cartData !== "") {
         let existDataList = JSON.parse(cartData);
