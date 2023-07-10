@@ -1,11 +1,20 @@
 import { CartList } from "@/models/cartWithoutLogin.model";
+import { updateCounter } from "@/redux/cartCounter/actionCreators";
 import Image from "next/image";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
 
 const CartListLayout = () => {
   const [localCart, setLocalCart] = useState<CartList[]>([]);
   const [subTotal, setSubTotal] = useState<number>(0);
   const [update, setUpdate] = useState<boolean>(false);
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const fetchCounter = React.useCallback(
+    (counter: number) => dispatch(updateCounter(counter)),
+    [dispatch]
+  );
 
   useEffect(() => {
     try {
@@ -41,6 +50,7 @@ const CartListLayout = () => {
         (obj: CartList) => obj.product_id !== id
       );
       localStorage.setItem("CartData", JSON.stringify(deleteData));
+      fetchCounter(deleteData.length);
       setUpdate(!update);
     }
   };

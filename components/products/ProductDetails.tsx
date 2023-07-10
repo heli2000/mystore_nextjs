@@ -1,13 +1,23 @@
 import { CartList } from "@/models/cartWithoutLogin.model";
 import { ProductList } from "@/models/product.model";
+import { updateCounter } from "@/redux/cartCounter/actionCreators";
 import Image from "next/image";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { Dispatch } from "redux";
 
 interface HomeProps {
   product: ProductList;
 }
 
 const ProductDetails: React.FC<HomeProps> = ({ product }) => {
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const fetchCounter = React.useCallback(
+    (counter: number) => dispatch(updateCounter(counter)),
+    [dispatch]
+  );
+
   const addToCart = () => {
     if (product.product_id) {
       let newData = {
@@ -32,9 +42,11 @@ const ProductDetails: React.FC<HomeProps> = ({ product }) => {
             "CartData",
             JSON.stringify([newData, ...existDataList])
           );
+          fetchCounter(existDataList.length + 1);
         }
       } else {
         localStorage.setItem("CartData", JSON.stringify([newData]));
+        fetchCounter(1);
       }
     }
   };

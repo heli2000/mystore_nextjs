@@ -1,11 +1,19 @@
+import { Dispatch } from "redux";
+import { rootState } from "@/redux/types";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { updateCounter } from "@/redux/cartCounter/actionCreators";
 
 const Header = () => {
-  const [cartCount, setCartCount] = useState(0);
+  const count = useSelector((state: rootState) => state.cartCounter.count);
 
-  useEffect(() => {
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const getCartCount = (): number => {
+    let count = 0;
     try {
       let CartDataObj = localStorage.getItem("CartData");
       if (
@@ -14,11 +22,23 @@ const Header = () => {
         CartDataObj !== ""
       ) {
         let CartCount: number = JSON.parse(CartDataObj).length;
-        setCartCount(CartCount);
+        return CartCount;
+      } else {
+        return count;
       }
     } catch (error) {
       console.error("Error fetching products:", error);
+      return count;
     }
+  };
+
+  const fetchCounter = React.useCallback(
+    (counter: number) => dispatch(updateCounter(counter)),
+    [dispatch]
+  );
+
+  useEffect(() => {
+    fetchCounter(getCartCount());
   }, []);
 
   return (
@@ -58,7 +78,7 @@ const Header = () => {
                     <div className="relative">
                       <div className="t-0 absolute left-3">
                         <p className="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">
-                          {cartCount}
+                          {count}
                         </p>
                       </div>
                       <svg
