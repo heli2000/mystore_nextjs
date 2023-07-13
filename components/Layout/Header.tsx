@@ -6,11 +6,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { updateCounter } from "@/redux/cartCounter/actionCreators";
+import Modal from "../modal/Modal";
+import SignInLayout from "../user/SignInLayout";
+import SignUpLayout from "../user/SignUpLayout";
 
 const Header = () => {
   const count = useSelector((state: rootState) => state.cartCounter.count);
-
   const dispatch: Dispatch<any> = useDispatch();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   const getCartCount = (): number => {
     let count = 0;
@@ -100,12 +104,18 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <button className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">
+                <button
+                  className="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded"
+                  onClick={() => setShowLoginModal(true)}
+                >
                   SignIn
                 </button>
               </li>
               <li>
-                <button className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">
+                <button
+                  className="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded"
+                  onClick={() => setShowSignUpModal(true)}
+                >
                   SignUp
                 </button>
               </li>
@@ -113,6 +123,26 @@ const Header = () => {
           </div>
         </div>
       </nav>
+      <Modal
+        show={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        title="SignIn"
+        width={48}
+        header={false}
+        footer={false}
+      >
+        <SignInLayout />
+      </Modal>
+      <Modal
+        show={showSignUpModal}
+        onClose={() => setShowSignUpModal(false)}
+        title="SignIn"
+        width={48}
+        header={false}
+        footer={false}
+      >
+        <SignUpLayout />
+      </Modal>
     </header>
   );
 };
